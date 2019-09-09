@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="style.css">
+  <title>Document</title>
+</head>
+<body>
+  <form class="my-form js_validate" action="https://google.com">
+    <div id="invalid-data-alert">
+    </div>
+    <label for="inp-name">Имя</label>
+    <input id="inp-name" class="my-form__input" type="text" name="name" value="" required>
+
+    <label for="inp-surname">Фамилия</label>
+    <input id="inp-surname" class="my-form__input" type="text" name="surname" value="" required>
+
+    <label for="inp-nickname">Ник</label>
+    <input id="inp-nickname" class="my-form__input" type="text" name="nickname" value="" required>
+
+    <label for="inp-text">Просто поле</label>
+    <input id="inp-text" class="my-form__input" type="text" name="text" value="" required>
+
+    <label for="simple-inp-text">Просто поле</label>
+    <input id="simple-inp-text" class="my-form__input" type="text" name="text" value="">
+
+    <label for="inp-email">Email</label>
+    <input id="inp-email" class="my-form__input" type="email" name="email" value="" required>
+
+    <label for="inp-phone">Телефон</label>
+    <input id="inp-phone" class="my-form__input" type="tel" name="phone" value="" required>
+
+    <label for="inp-password">Пароль</label>
+    <input id="inp-password" class="my-form__input" type="password" name="password" value="" required>
+    
+    <input type="submit">
+  </form>
+
+  <!-- <input class="game-level-input" type="number">
+  <button class="start-game">start game</button>
+  <button class="restart-game">restart game</button> -->
+
+  <script src="https://code.jquery.com/jquery-3.4.1.js"
+  integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+  crossorigin="anonymous"></script>
+  <script src="script.js"></script>
+</body>
+</html>
