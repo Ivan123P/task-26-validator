@@ -24,7 +24,7 @@ Validator.prototype.onBlur = function(element, ruls) {
   // Ссылка на Validator для использования его методов
   const mainObj = this;
 
-  // перебераю выборку element
+  // перебираю выборку element
   $.each($(element), (i, val) => {
     // инициализирую на каждом слушатель события потери фокуса (blur)
     $(val).on('blur', function(e) {
