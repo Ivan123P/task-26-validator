@@ -17,6 +17,7 @@ Validator.prototype.init = function() {
   $.each( this.inputs, (i, val) => {
     // передаю текущий элемент и набор правил. this == Validator
     this.onBlur(val, this.ruls);
+    this.onInput(val);
   });
 }
 
@@ -24,41 +25,51 @@ Validator.prototype.onBlur = function(element, ruls) {
   // Ссылка на Validator для использования его методов
   const mainObj = this;
 
-  // перебираю выборку element
-  $.each($(element), (i, val) => {
+  // находим нужные элементы в нашей форме
+  $.each($(mainObj.form).find(element), (i, val) => {
     // инициализирую на каждом слушатель события потери фокуса (blur)
     $(val).on('blur', function(e) {
 
       // сортирую по типу для вызова нужных правил
       if($(this).attr("type") === "text") {
-        if(mainObj.minLength($(this).val(), ruls[0].value)) {
+        if(mainObj.minLength($(this).val(), ruls.minLength)) {
           $(this).addClass('error');
         } else {
           $(this).removeClass('error');
         }
 
       } else if ($(this).attr("type") === "tel") {
-        if(mainObj.minLength($(this).val(), ruls[0].value)) {
+        if(mainObj.phone($(this).val(), ruls.phone) || mainObj.minLength($(this).val(), ruls.minLength)) {
           $(this).addClass('error');
         } else {
           $(this).removeClass('error');
         }
 
       } else if ($(this).attr("type") === "email") {
-        if(mainObj.minLength($(this).val(), ruls[0].value)) {
+        if(mainObj.email($(this).val(), ruls.email)) {
           $(this).addClass('error');
         } else {
           $(this).removeClass('error');
         }
 
       } else if ($(this).attr("type") === "password") {
-        if(mainObj.minLength($(this).val(), ruls[0].value)) {
+        if(mainObj.password($(this).val(), ruls.password)) {
           $(this).addClass('error');
         } else {
           $(this).removeClass('error');
         }
       }
     })
+  });
+}
+
+Validator.prototype.onInput = function(val) {
+  $.each($(this.form).find(val), (i, val) => {
+    $(val).on('input', function(e) {
+      if($(this).hasClass('error')) {
+        $(this).removeClass('error');
+      }
+    });
   });
 }
 
@@ -71,16 +82,31 @@ Validator.prototype.minLength = function(val, min) {
   return false;
 }
 
-Validator.prototype.latinAlphabet = function(val, min) {}
+Validator.prototype.email = function(val, rul) {
+  // если match === null(иначе вернул бы обьект с совпадением) то указываем на ошибку - true ошибка есть
+  if(val.match(rul) === null) {
+    return true;
+  }
+  return false;
+}
 
-Validator.prototype.numbers = function(val, min) {}
+Validator.prototype.phone = function(val, rul) {
+  if(val.match(rul) === null) {
+    return true;
+  }
+  return false;
+}
 
-Validator.prototype.hasAtSymbol = function(val, min) {}
+Validator.prototype.password = function(val, rul) {
+  if(val.match(rul) === null) {
+    return true;
+  }
+  return false;
+}
+
+Validator.prototype.addErrorMessage = function(val, min) {}
 
 Validator.prototype.validate = function() {
-  this.ruls.forEach((el, i) => {
-    console.log(this.ruls[0]);
-  });
 }
 
 const validator = new Validator({
@@ -91,24 +117,13 @@ const validator = new Validator({
     email: 'input[type=email]:required',
     password: 'input[type=password]:required'
   },
-  ruls: [
+  ruls:
     {
-      key: "minLength",
-      value: 4
-    },
-    {
-      key: "latinAlphabet",
-      value: 4
-    },
-    {
-      key: "numbers",
-      value: 4
-    },
-    {
-      key: "hasAtSymbol",
-      value: 4
+      minLength: 4,
+      email: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/,
+      phone: /^[0-9]*$/,
+      password: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
     }
-  ]
 });
 
 validator.validate();
