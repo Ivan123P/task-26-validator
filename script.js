@@ -110,8 +110,7 @@ Validator.prototype.password = function(val, rul) {
 }
 
 Validator.prototype.addErrorMessage = function(element, text) {
-  element.before($(this.messageErrorDiv).clone());
-  $('.message-error').text(text);
+  element.before($(this.messageErrorDiv).clone().text(text));
 }
 
 Validator.prototype.validate = function() {
