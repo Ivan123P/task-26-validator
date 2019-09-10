@@ -35,10 +35,9 @@ body {
   outline-color: red;
 }
 .message-error {
-  margin-bottom: 10px;
+  max-width: 100%;
   padding: 5px 10px;
   color: red;
   border-color: red;
   text-align: center;
-  text-transform: uppercase;
 }

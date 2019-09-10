@@ -7,6 +7,7 @@ function Validator(options) {
   this.inputs = options.inputs;
   // массив обьектов со списком правил
   this.ruls = options.ruls;
+  this.messageErrorDiv = '<div class="message-error"></div>';
 
   // навешиваю события
   this.init();
@@ -32,28 +33,28 @@ Validator.prototype.onBlur = function(element, ruls) {
 
       // сортирую по типу для вызова нужных правил
       if($(this).attr("type") === "text") {
-        if(mainObj.minLength($(this).val(), ruls.minLength)) {
+        if(mainObj.minLength($(this), ruls.minLength)) {
           $(this).addClass('error');
         } else {
           $(this).removeClass('error');
         }
 
       } else if ($(this).attr("type") === "tel") {
-        if(mainObj.phone($(this).val(), ruls.phone) || mainObj.minLength($(this).val(), ruls.minLength)) {
+        if(mainObj.phone($(this), ruls.phone) || mainObj.minLength($(this), ruls.minLength)) {
           $(this).addClass('error');
         } else {
           $(this).removeClass('error');
         }
 
       } else if ($(this).attr("type") === "email") {
-        if(mainObj.email($(this).val(), ruls.email)) {
+        if(mainObj.email($(this), ruls.email)) {
           $(this).addClass('error');
         } else {
           $(this).removeClass('error');
         }
 
       } else if ($(this).attr("type") === "password") {
-        if(mainObj.password($(this).val(), ruls.password)) {
+        if(mainObj.password($(this), ruls.password)) {
           $(this).addClass('error');
         } else {
           $(this).removeClass('error');
@@ -75,7 +76,8 @@ Validator.prototype.onInput = function(val) {
 
 Validator.prototype.minLength = function(val, min) {
   // если количество символов меньше min то указываем на ошибку - true ошибка есть
-  if(val.length < min) {
+  if(val.val().length < min) {
+    this.addErrorMessage(val, "Необходимо ввести минимум 4 символа");
     return true;
   }
   // иначе ошибки нет и элемент валиден
@@ -84,27 +86,33 @@ Validator.prototype.minLength = function(val, min) {
 
 Validator.prototype.email = function(val, rul) {
   // если match === null(иначе вернул бы обьект с совпадением) то указываем на ошибку - true ошибка есть
-  if(val.match(rul) === null) {
+  if(val.val().match(rul) === null) {
+    this.addErrorMessage(val, "Введите корректный email. simple@example.com");
     return true;
   }
   return false;
 }
 
 Validator.prototype.phone = function(val, rul) {
-  if(val.match(rul) === null) {
+  if(val.val().match(rul) === null) {
+    this.addErrorMessage(val, "Введенные данные не должны содержать символы");
     return true;
   }
   return false;
 }
 
 Validator.prototype.password = function(val, rul) {
-  if(val.match(rul) === null) {
+  if(val.val().match(rul) === null) {
+    this.addErrorMessage(val, "Пароль должен состоять из минимум 1 цифры, 1 латинской буквы и содержать 8 символов");
     return true;
   }
   return false;
 }
 
-Validator.prototype.addErrorMessage = function(val, min) {}
+Validator.prototype.addErrorMessage = function(element, text) {
+  element.before($(this.messageErrorDiv).clone());
+  $('.message-error').text(text);
+}
 
 Validator.prototype.validate = function() {
 }
