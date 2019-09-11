@@ -64,11 +64,14 @@ Validator.prototype.onBlur = function(element, ruls) {
   });
 }
 
-Validator.prototype.onInput = function(val) {
-  $.each($(this.form).find(val), (i, val) => {
-    $(val).on('input', function(e) {
+Validator.prototype.onInput = function(element) {
+  $.each($(this.form).find(element), (i, element) => {
+    $(element).on('input', function(e) {
       if($(this).hasClass('error')) {
         $(this).removeClass('error');
+      }
+      if($(this).prev('.message-error')) {
+        $(this).prev('.message-error').detach();
       }
     });
   });
@@ -110,7 +113,9 @@ Validator.prototype.password = function(val, rul) {
 }
 
 Validator.prototype.addErrorMessage = function(element, text) {
-  element.before($(this.messageErrorDiv).clone().text(text));
+  if(element.prev('.message-error').length === 0) {
+    element.before($(this.messageErrorDiv).clone().text(text));
+  }
 }
 
 Validator.prototype.validate = function() {
